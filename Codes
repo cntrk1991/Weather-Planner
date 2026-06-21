@@ -1,0 +1,97 @@
+import random
+
+
+def collect_conditions():
+    sky_state = input("Describe the sky (sunny/rainy/cloudy/snowy): ").lower()
+    degrees = int(input("Current temperature (°C): "))
+    return sky_state, degrees
+
+
+def perceived_temperature(degrees, sky_state):
+    if sky_state == "rainy":
+        return degrees - 3
+    elif sky_state == "snowy":
+        return degrees - 6
+    elif sky_state == "sunny":
+        return degrees + 2
+    return degrees
+
+
+def clothing_hint(sky_state, degrees):
+    if sky_state == "rainy":
+        return "Grab a raincoat or umbrella ☔"
+    elif sky_state == "snowy":
+        return "Layer up with gloves and a thick coat 🧤"
+    elif degrees < 8:
+        return "Bundle up, it's quite cold 🧥"
+    elif degrees < 18:
+        return "A light jacket will do 🧢"
+    else:
+        return "Keep it light, it's warm 👕"
+
+
+def vibe_index(sky_state, degrees):
+    score = 0
+
+    weather_weights = {
+        "sunny": 2,
+        "cloudy": 1,
+        "rainy": -1,
+        "snowy": -2
+    }
+
+    score += weather_weights.get(sky_state, 0)
+
+    if degrees > 28:
+        score += 1
+    elif degrees < 5:
+        score -= 1
+
+    return score
+
+
+def daily_vibe(score):
+    if score >= 3:
+        return "🚀 Perfect day for plans and energy"
+    elif score >= 1:
+        return "😌 Easygoing and manageable"
+    elif score == 0:
+        return "🙂 Neutral day, nothing extreme"
+    else:
+        return "🌙 Slow day, take care of yourself"
+
+
+def extra_note(sky_state):
+    notes = {
+        "sunny": ["Don't forget sunglasses 😎", "Good time for a walk"],
+        "rainy": ["Maybe a movie day 🎬", "Listen to some chill music 🎧"],
+        "cloudy": ["A calm and quiet atmosphere ☁️"],
+        "snowy": ["Hot drinks recommended ☕", "Stay cozy inside"]
+    }
+
+    return random.choice(notes.get(sky_state, ["Have a balanced day"]))
+
+
+def main():
+    print("🌦️ Smart Weather Companion")
+
+    sky_state, degrees = collect_conditions()
+    feels = perceived_temperature(degrees, sky_state)
+
+    outfit = clothing_hint(sky_state, degrees)
+    score = vibe_index(sky_state, feels)
+    mood = daily_vibe(score)
+    note = extra_note(sky_state)
+
+    print("\n--- TODAY OVERVIEW ---")
+    print(f"Condition: {sky_state}")
+    print(f"Temperature: {degrees}°C")
+    print(f"Feels like: {feels}°C")
+    print(f"Style tip: {outfit}")
+    print(f"Vibe score: {score}")
+    print(f"Day mood: {mood}")
+    print(f"Extra: {note}")
+
+
+if __name__ == "__main__":
+    main()
